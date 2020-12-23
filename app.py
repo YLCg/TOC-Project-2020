@@ -114,8 +114,8 @@ def webhook_handler():
 def show_fsm():
     #machine.get_graph().draw("fsm.png", prog="dot", format="png")
     #return send_file("fsm.png", mimetype="image/png")
-    machine.get_graph().draw("fsm.jpg", prog="dot", format="jpg")
-    return send_file("fsm.jpg", mimetype="image/jpeg")
+    machine.get_graph().draw("fsm.png", prog="dot", format="png")
+    return send_file("fsm.png", mimetype="image/png")
 
 
 if __name__ == "__main__":
