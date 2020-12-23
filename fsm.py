@@ -15,9 +15,7 @@ class TocMachine(GraphMachine):
         text = event.message.text
         return text.lower() == "go to state2"
 
-    def is_going_to_show_fsm_pic(self, event):
-        text = event.message.text
-        return text == "fsm pic"
+    
     
 
     def on_enter_state1(self, event):
@@ -40,10 +38,4 @@ class TocMachine(GraphMachine):
     def on_exit_state2(self):
         print("Leaving state2")
 
-    def on_enter_show_fsm_pic(self, event):
-        reply_token = event.reply_token
-        message = message_template.show_pic
-        message_to_reply = FlexSendMessage("fsm pic", message)
-        line_bot_api = LineBotApi( os.getenv('LINE_CHANNEL_ACCESS_TOKEN') )
-        line_bot_api.reply_message(reply_token, message_to_reply)
-        self.go_back()
+    
