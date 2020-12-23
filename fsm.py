@@ -1,11 +1,15 @@
 from transitions.extensions import GraphMachine
 
-from utils import send_text_message
+from utils import send_text_message, send_button_message
 
 
 class TocMachine(GraphMachine):
     def __init__(self, **machine_configs):
         self.machine = GraphMachine(model=self, **machine_configs)
+
+    def is_going_to_start(self, event):
+        text = event.message.text
+        return text.lower() == "start"
 
     def is_going_to_group(self, event):
         text = event.message.text
@@ -43,7 +47,7 @@ class TocMachine(GraphMachine):
 
     
     def on_enter_data(self, event):
-        print("I'm entering state1")
+        print("I'm entering data")
         reply_token = event.reply_token
         send_text_message(reply_token, "data")
 
