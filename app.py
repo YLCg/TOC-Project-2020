@@ -9,12 +9,12 @@ from linebot.models import MessageEvent, TextMessage, TextSendMessage
 
 from fsm import TocMachine
 from utils import send_text_message,send_button_message,send_image_message
-
+import psycopg2
 load_dotenv()
 
 
 machine = TocMachine(
-    states=["person", "insert"],
+    states=["person", "insert", "input_data", "select", "list", "delete"],
     transitions=[
         {
             "trigger": "advance",
@@ -24,11 +24,35 @@ machine = TocMachine(
         },
         {
             "trigger": "advance",
-            "source": "group",
+            "source": "person",
             "dest": "insert",
             "conditions": "is_going_to_insert",
         },
-        {"trigger": "go_back", "source": ["person", "insert"], "dest": "user"},
+        {
+            "trigger": "advance",
+            "source": "insert",
+            "dest": "input_data",
+            "conditions": "is_going_to_input_data",
+        },
+        {
+            "trigger": "advance",
+            "source": "person",
+            "dest": "select",
+            "conditions": "is_going_to_select",
+        },
+        {
+            "trigger": "advance",
+            "source": "select",
+            "dest": "list",
+            "conditions": "is_going_to_list",
+        },
+        {
+            "trigger": "advance",
+            "source": "select",
+            "dest": "delete",
+            "conditions": "is_going_to_delete",
+        },
+        {"trigger": "go_back", "source": ["person", "insert", "select", "input_data", "list","delete"], "dest": "user"},
     ],
     initial="user",
     auto_transitions=False,
@@ -87,7 +111,7 @@ def webhook_handler():
                 #send_image_message(event.reply_token, 'https://1448fb5f965b.ngrok.io/show-fsm')
                 send_image_message(event.reply_token, 'https://f64061070.herokuapp.com/show-fsm')
 
-            elif (machine.state != "user") and event.message.text.lower() == "re":
+            elif event.message.text.lower() == "re":
                 send_text_message(event.reply_token, "restart")
                 machine.go_back(event)
             elif machine.state == "user":

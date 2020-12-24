@@ -43,17 +43,18 @@ def prepare_record(text):
 
     record_list = []
 
-    for i in text_list[0:]:
+    for i in text_list[1:]:
         temp_list = i.split('/')
 
         temp_name = temp_list[0]
+        print(temp_name)
 
-        year = text_list[1].split('.')[0]
-        month = text_list[1].split('.')[1]
-        day = text_list[1].split('.')[2]
+        year = temp_list[1].split('.')[0]
+        month = temp_list[1].split('.')[1]
+        day = temp_list[1].split('.')[2]
         d = datetime.date(int(year), int(month), int(day))
 
-        first_solo_album= temp_list[2]
+        first_solo_album = temp_list[2]
         fav_song = temp_list[3]
 
         record = (temp_name, d, first_solo_album, fav_song)
