@@ -1,6 +1,6 @@
 from transitions.extensions import GraphMachine
 from utils import send_text_message, send_button_message
-from database import database_creat_person
+from database import database_creat_person,line_insert_record
 
 
 class TocMachine(GraphMachine):
@@ -47,11 +47,11 @@ class TocMachine(GraphMachine):
     def on_enter_insert(self, event):
         text = event.message.text
         try:
-            record_list = utils.prepare_record(text)
-            database.line_insert_record(record_list)
+            record_list = prepare_record(text)
+            line_insert_record(record_list)
 
             reply_token = event.reply_token
-            line_bot_api.reply_message(reply_token, "insert success ")
+            send_text_message(reply_token, "insert success ")
 
         except:
             reply_token = event.reply_token
