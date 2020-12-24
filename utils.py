@@ -1,5 +1,5 @@
 import os
-
+import datetime
 from linebot import LineBotApi, WebhookParser
 from linebot.models import MessageEvent, TextMessage, TextSendMessage, ImageSendMessage, TemplateSendMessage
 
@@ -36,6 +36,30 @@ def send_image_message(reply_token, url):
     line_bot_api.reply_message(reply_token, message)
 
     return "OK"
+
+
+def prepare_record(text):
+    text_list = text.split('\n')
+
+    record_list = []
+
+    for i in text_list[0:]:
+        temp_list = i.split('/')
+
+        temp_name = temp_list[0]
+
+        year = text_list[1].split('.')[0]
+        month = text_list[1].split('.')[1]
+        day = text_list[1].split('.')[2]
+        d = datetime.date(int(year), int(month), int(day))
+
+        first_solo_album= temp_list[2]
+        fav_song = temp_list[3]
+
+        record = (temp_name, d, first_solo_album, fav_song)
+        record_list.append(record)
+
+    return record_list
 
 """
 def send_image_url(id, img_url):

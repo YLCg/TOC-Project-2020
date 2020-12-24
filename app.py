@@ -14,20 +14,8 @@ load_dotenv()
 
 
 machine = TocMachine(
-    states=["start", "group", "person", "data"],
+    states=["person", "insert"],
     transitions=[
-        {
-            "trigger": "advance",
-            "source": "user",
-            "dest": "start",
-            "conditions": "is_going_to_start",
-        },
-        {
-            "trigger": "advance",
-            "source": "user",
-            "dest": "group",
-            "conditions": "is_going_to_group",
-        },
         {
             "trigger": "advance",
             "source": "user",
@@ -37,10 +25,10 @@ machine = TocMachine(
         {
             "trigger": "advance",
             "source": "group",
-            "dest": "data",
-            "conditions": "is_going_to_data",
+            "dest": "insert",
+            "conditions": "is_going_to_insert",
         },
-        {"trigger": "go_back", "source": ["start", "group", "person","data"], "dest": "user"},
+        {"trigger": "go_back", "source": ["person", "insert"], "dest": "user"},
     ],
     initial="user",
     auto_transitions=False,
@@ -94,16 +82,16 @@ def webhook_handler():
         response = machine.advance(event)
 
         if response == False:
-            #print(self.state)
-            if event.message.text.lower() == 'fsm':
-                #send_image_message(event.reply_token, 'https://c9b4cdb2d22d.ngrok.io/show-fsm')
-                send_image_message(event.reply_token, 'https://f64061070.herokuapp.com/show-fsm')
 
-                print("yes")
+            if event.message.text.lower() == 'fsm':
+                send_image_message(event.reply_token, 'https://1448fb5f965b.ngrok.io/show-fsm')
+                #send_image_message(event.reply_token, 'https://f64061070.herokuapp.com/show-fsm')
+
             elif (machine.state != "user") and event.message.text.lower() == "re":
                 send_text_message(event.reply_token, "restart")
                 machine.go_back(event)
-
+            elif machine.state == "user":
+                send_text_message(event.reply_token, "請打person進入個人資料庫\n欲重新開始，請底re")
             else:
                 send_text_message(event.reply_token, "Not Entering any State")
 
