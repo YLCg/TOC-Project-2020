@@ -84,8 +84,8 @@ def webhook_handler():
         if response == False:
 
             if event.message.text.lower() == 'fsm':
-                send_image_message(event.reply_token, 'https://1448fb5f965b.ngrok.io/show-fsm')
-                #send_image_message(event.reply_token, 'https://f64061070.herokuapp.com/show-fsm')
+                #send_image_message(event.reply_token, 'https://1448fb5f965b.ngrok.io/show-fsm')
+                send_image_message(event.reply_token, 'https://f64061070.herokuapp.com/show-fsm')
 
             elif (machine.state != "user") and event.message.text.lower() == "re":
                 send_text_message(event.reply_token, "restart")
