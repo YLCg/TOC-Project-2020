@@ -1,6 +1,6 @@
 from transitions.extensions import GraphMachine
 from utils import send_text_message, send_button_message
-from database import database_creat_person,line_insert_record
+from database import database_creat_person, line_insert_record
 
 
 class TocMachine(GraphMachine):
@@ -35,7 +35,7 @@ class TocMachine(GraphMachine):
 
     def on_enter_person(self, event):
         print("I'm entering person")
-        database.database_creat_person()
+        database_creat_person()
 
         reply_token = event.reply_token
         send_text_message(reply_token, "person")
