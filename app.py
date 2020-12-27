@@ -9,12 +9,11 @@ from linebot.models import MessageEvent, TextMessage, TextSendMessage
 
 from fsm import TocMachine
 from utils import send_text_message,send_button_message,send_image_message
-import psycopg2
 load_dotenv()
 
 
 machine = TocMachine(
-    states=["person", "insert", "input_data", "select", "list", "delete"],
+    states=["person", "insert", "input_data", "select", "list", "delete", "update", "updating", "show_img"],
     transitions=[
         {
             "trigger": "advance",
@@ -52,7 +51,27 @@ machine = TocMachine(
             "dest": "delete",
             "conditions": "is_going_to_delete",
         },
-        {"trigger": "go_back", "source": ["person", "insert", "select", "input_data", "list","delete"], "dest": "user"},
+        {
+            "trigger": "advance",
+            "source": "person",
+            "dest": "update",
+            "conditions": "is_going_to_update",
+        },
+        {
+            "trigger": "advance",
+            "source": "update",
+            "dest": "updating",
+            "conditions": "is_going_to_updating",
+        },
+        {
+            "trigger": "advance",
+            "source": "user",
+            "dest": "show_img",
+            "conditions": "is_going_to_show_img",
+        },
+        {"trigger": "go_back",
+         "source": ["person", "insert", "select", "input_data", "list", "delete", "update", "updating","show_img"],
+         "dest": "user"},
     ],
     initial="user",
     auto_transitions=False,
@@ -65,6 +84,7 @@ app = Flask(__name__, static_url_path="")
 # get channel_secret and channel_access_token from your environment variable
 channel_secret = os.getenv("LINE_CHANNEL_SECRET", None)
 channel_access_token = os.getenv("LINE_CHANNEL_ACCESS_TOKEN", None)
+fsm_host = os.getenv("FSM", None)
 if channel_secret is None:
     print("Specify LINE_CHANNEL_SECRET as environment variable.")
     sys.exit(1)
@@ -108,14 +128,17 @@ def webhook_handler():
         if response == False:
 
             if event.message.text.lower() == 'fsm':
-                #send_image_message(event.reply_token, 'https://1448fb5f965b.ngrok.io/show-fsm')
-                send_image_message(event.reply_token, 'https://f64061070.herokuapp.com/show-fsm')
+                send_image_message(event.reply_token, fsm_host)
+                #send_image_message(event.reply_token, 'https://41e22cc69ba9.ngrok.io/show-fsm')
+                #send_image_message(event.reply_token, 'https://f64061070.herokuapp.com/show-fsm')
 
             elif event.message.text.lower() == "re":
                 send_text_message(event.reply_token, "restart")
                 machine.go_back(event)
             elif machine.state == "user":
                 send_text_message(event.reply_token, "請打person進入個人資料庫\n欲重新開始，請底re")
+            elif machine.state == "update":
+                send_text_message(event.reply_token, "請選擇條件\n")
             else:
                 send_text_message(event.reply_token, "Not Entering any State")
 

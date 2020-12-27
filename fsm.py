@@ -1,6 +1,6 @@
 from transitions.extensions import GraphMachine
-from utils import send_text_message, send_button_message, prepare_record
-from database import database_create_person, line_insert_record, database_select, database_list,deleteData
+from utils import send_text_message, send_button_message, prepare_record,preupdate,send_image_message
+from database import database_create_person, line_insert_record, database_select, database_list,deleteData,updateData
 
 
 class TocMachine(GraphMachine):
@@ -19,8 +19,11 @@ class TocMachine(GraphMachine):
         return text.lower() == "select"
     def is_going_to_input_data(self, event):
         text = event.message.text
-        #return text.lower() == "select"
-        return True
+        if "insert" in text:
+            return True
+        else:
+            return False
+
     def is_going_to_list(self, event):
         text = event.message.text
         if text.lower() == "list" or text.lower() == "name" or text.lower() == "birthday" or text.lower() == "first_solo_album" or text.lower() == "fav_song":
@@ -30,6 +33,26 @@ class TocMachine(GraphMachine):
     def is_going_to_delete(self, event):
         text = event.message.text
         if 'delete' in text:
+            return True
+        else:
+            return False
+    def is_going_to_update(self, event):
+        text = event.message.text
+        if 'update' in text:
+            return True
+        else:
+            return False
+    def is_going_to_show_img(self, event):
+        text = event.message.text
+        if 'show fsm' in text:
+            return True
+        else:
+            return False
+
+
+    def is_going_to_updating(self, event):
+        text = event.message.text
+        if 'SET' in text:
             return True
         else:
             return False
@@ -115,6 +138,42 @@ class TocMachine(GraphMachine):
 
     def on_exit_delete(self, event):
         print("Leaving delete")
+###################
+    def on_enter_update(self, event):
+        print("I'm entering update")
+        reply_token = event.reply_token
+        send_text_message(reply_token, "請輸入條件\n可使用欄位有：\nname, birthday , first_solo_album, fav_song\n範例：\nSET\nname/spy\nfav_song/123456\nWHERE:\nname/name")
+        #self.go_back(event)
+########################
+    def on_exit_update(self, event):
+        print("Leaving update")
+
+###################
+    def on_enter_updating(self, event):
+        print("I'm entering updating")
+
+        text = event.message.text
+
+        info = preupdate(text)
+        text_list = info.split('\n')
+        updateData(text_list[0],text_list[1])
+        reply_token = event.reply_token
+        send_text_message(reply_token, "finish updating")
+
+        self.go_back(event)
+
+    def on_exit_updating(self, event):
+       print("Leaving updating")
+
+    def on_enter_show_img(self, event):
+        print("I'm entering show img")
+        url = 'https://i.imgur.com/rYuRejo.png'
+        send_image_message(event.reply_token, url)
+
+        self.go_back(event)
+
+    def on_exit_show_img(self, event):
+       print("Leaving show_img")
 
 
 
