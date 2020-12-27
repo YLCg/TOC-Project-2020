@@ -31,7 +31,7 @@ def line_insert_record(record_list):
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cursor = conn.cursor()
 
-    table_columns = '(name, birthday , first_solo_album, fav_song)'
+    table_columns = '( name, birthday , first_solo_album, fav_song)'
     postgres_insert_query = f"""INSERT INTO person {table_columns} VALUES (%s,%s,%s,%s)"""
 
     cursor.executemany(postgres_insert_query, record_list)
@@ -71,7 +71,7 @@ def database_list(text):
     result = cursor.fetchall()
     message = "list:\n"
     for row in result:
-        message =message+"id = "row[0]+"/" + row[1] + "/"+str(row[2])+"/"+row[3]+"/"+ row[4]+"\n"
+        message = message + "id = " + row[0]+"/" + row[1] + "/" + str(row[2]) + "/" + row[3] + "/" + row[4]+"\n"
     cursor.close()
     conn.close()
 
