@@ -1,154 +1,71 @@
-# TOC Project 2020
+# 資料機器人
 
-[![Maintainability](https://api.codeclimate.com/v1/badges/dc7fa47fcd809b99d087/maintainability)](https://codeclimate.com/github/NCKU-CCS/TOC-Project-2020/maintainability)
+因自己喜歡的歌手越來越多，當想要推坑別人時常常一時間想不到特定歌手的基本機料與該歌手的發行曲中我最喜歡的歌名，故建立一個簡易的資料庫來整理我喜愛的歌手列表。
 
-[![Known Vulnerabilities](https://snyk.io/test/github/NCKU-CCS/TOC-Project-2020/badge.svg)](https://snyk.io/test/github/NCKU-CCS/TOC-Project-2020)
+輸入的資料包含歌手名、生日、第一張專輯、我最喜歡的歌。
 
+## 使用方式
+###1. heroku：因已部於heroku上，固可直接使用
 
-Template Code for TOC Project 2020
+###2. local 端
+1. install `pipenv`、`ngrok`、`heroku`
 
-A Line bot based on a finite state machine
+2. install ```pipenv ```所需套件
 
-More details in the [Slides](https://hackmd.io/@TTW/ToC-2019-Project#) and [FAQ](https://hackmd.io/s/B1Xw7E8kN)
-
-## Setup
-
-### Prerequisite
-* Python 3.6
-* Pipenv
-* Facebook Page and App
-* HTTPS Server
-
-#### Install Dependency
-```sh
-pip3 install pipenv
-
-pipenv --three
-
-pipenv install
-
-pipenv shell
+3. run `ngrok` to deploy Line Chat Bot locally
+```shell
+ngrok.exe http 5000
 ```
+4. 從`.env.sample`產生出一個`.env`，並填入以下四個資訊
+- Line
+    - LINE_CHANNEL_SECRET
+    - LINE_CHANNEL_ACCESS_TOKEN
+- fsm
+    - fsm_url=ngrok跑出來的https
+    - - 用於生成當下的fsm
+5. 修改 line 開發者頁面的 Webhook URL
 
-* pygraphviz (For visualizing Finite State Machine)
-    * [Setup pygraphviz on Ubuntu](http://www.jianshu.com/p/a3da7ecc5303)
-	* [Note: macOS Install error](https://github.com/pygraphviz/pygraphviz/issues/100)
+6.將database.py 中的
 
+`DATABASE_URL = os.environ['DATABASE_URL']`
+皆修改成
+`DATABASE_URL = os.popen('heroku config:get DATABASE_URL -a f64061070').read()[:-1]
+7. run ```heroku local```
+## states
 
-#### Secret Data
-You should generate a `.env` file to set Environment Variables refer to our `.env.sample`.
-`LINE_CHANNEL_SECRET` and `LINE_CHANNEL_ACCESS_TOKEN` **MUST** be set to proper values.
-Otherwise, you might not be able to run your code.
-
-#### Run Locally
-You can either setup https server or using `ngrok` as a proxy.
-
-#### a. Ngrok installation
-* [ macOS, Windows, Linux](https://ngrok.com/download)
-
-or you can use Homebrew (MAC)
-```sh
-brew cask install ngrok
-```
-
-**`ngrok` would be used in the following instruction**
-
-```sh
-ngrok http 8000
-```
-
-After that, `ngrok` would generate a https URL.
-
-#### Run the sever
-
-```sh
-python3 app.py
-```
-
-#### b. Servo
-
-Or You can use [servo](http://serveo.net/) to expose local servers to the internet.
+1.user：
+    - 輸入"show fsm"獲得此line bot 的fsm。
+    - 輸入"person" 進入資料庫。
+    - 輸入"re"會回到最開始（user）。
+2.show fsm:
+    - 產出fsm並回到user
+3.person:
+    - 確認是否有資料庫名為person，若無則建立一個。
+4.insert:
+    - 準備插入資料。
+5.input_data:
+    - 輸入欲插入的資料，並將該筆資料插入資料庫中。
+6.select:
+    - 準備列出資料或刪除資料
+7.list:
+    - 列出資料庫中的資料。
+8.delete:
+    - 輸入欲刪除的資料，並刪除。
+9.update
+    - 更新資料。
 
 
 ## Finite State Machine
-![fsm](./img/show-fsm.png)
+![fsm](./img/fsm.png)
 
-## Usage
-The initial state is set to `user`.
-
-Every time `user` state is triggered to `advance` to another state, it will `go_back` to `user` state after the bot replies corresponding message.
-
-* user
-	* Input: "go to state1"
-		* Reply: "I'm entering state1"
-
-	* Input: "go to state2"
-		* Reply: "I'm entering state2"
-
-## Deploy
-Setting to deploy webhooks on Heroku.
-
-### Heroku CLI installation
-
-* [macOS, Windows](https://devcenter.heroku.com/articles/heroku-cli)
-
-or you can use Homebrew (MAC)
-```sh
-brew tap heroku/brew && brew install heroku
-```
-
-or you can use Snap (Ubuntu 16+)
-```sh
-sudo snap install --classic heroku
-```
-
-### Connect to Heroku
-
-1. Register Heroku: https://signup.heroku.com
-
-2. Create Heroku project from website
-
-3. CLI Login
-
-	`heroku login`
-
-### Upload project to Heroku
-
-1. Add local project to Heroku project
-
-	heroku git:remote -a {HEROKU_APP_NAME}
-
-2. Upload project
-
-	```
-	git add .
-	git commit -m "Add code"
-	git push -f heroku master
-	```
-
-3. Set Environment - Line Messaging API Secret Keys
-
-	```
-	heroku config:set LINE_CHANNEL_SECRET=your_line_channel_secret
-	heroku config:set LINE_CHANNEL_ACCESS_TOKEN=your_line_channel_access_token
-	```
-
-4. Your Project is now running on Heroku!
-
-	url: `{HEROKU_APP_NAME}.herokuapp.com/callback`
-
-	debug command: `heroku logs --tail --app {HEROKU_APP_NAME}`
-
-5. If fail with `pygraphviz` install errors
-
-	run commands below can solve the problems
-	```
-	heroku buildpacks:set heroku/python
-	heroku buildpacks:add --index 1 heroku-community/apt
-	```
-
-	refference: https://hackmd.io/@ccw/B1Xw7E8kN?type=view#Q2-如何在-Heroku-使用-pygraphviz
-
+## 展示
+![fsm](./img/1.png)
+![fsm](./img/2.png)
+![fsm](./img/3.png)
+![fsm](./img/4.png)
+![fsm](./img/5.png)
+![fsm](./img/6.png)
+![fsm](./img/7.png)
 ## Reference
 [Pipenv](https://medium.com/@chihsuan/pipenv-更簡單-更快速的-python-套件管理工具-135a47e504f4) ❤️ [@chihsuan](https://github.com/chihsuan)
 
@@ -157,3 +74,5 @@ sudo snap install --classic heroku
 Flask Architecture ❤️ [@Sirius207](https://github.com/Sirius207)
 
 [Line line-bot-sdk-python](https://github.com/line/line-bot-sdk-python/tree/master/examples/flask-echo)
+
+[第 17 天：Heroku Postgres：連接 LINE 聊天機器人](https://ithelp.ithome.com.tw/articles/10220773)
