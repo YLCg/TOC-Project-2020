@@ -64,13 +64,14 @@ def database_list(text):
 
     if text.lower() == "list":
         postgres_select_query = f"""SELECT * FROM person"""
-
+    else:
+        postgres_select_query = f"""SELECT {text} FROM person"""
     cursor.execute(postgres_select_query)
 
     result = cursor.fetchall()
-    message = "list\n"
+    message = "list:\n"
     for row in result:
-        message =message+"name = " + row[1] + "生日  = "+str(row[2])+"第一張solo = "+row[3]+"我的最愛 = "+ row[4]+"\n"
+        message =message+"id = "row[0]+"/" + row[1] + "/"+str(row[2])+"/"+row[3]+"/"+ row[4]+"\n"
     cursor.close()
     conn.close()
 

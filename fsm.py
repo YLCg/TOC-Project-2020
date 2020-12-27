@@ -26,7 +26,7 @@ class TocMachine(GraphMachine):
 
     def is_going_to_list(self, event):
         text = event.message.text
-        if text.lower() == "list" or text.lower() == "name" or text.lower() == "birthday" or text.lower() == "first_solo_album" or text.lower() == "fav_song":
+        if "list" in text or "record_num" in text or "name" in text or  "birthday" in text or "first_solo_album" in text or "fav_song" in text:
             return True;
         #return text.lower() == "select"
         return False
