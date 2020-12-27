@@ -14,7 +14,7 @@
 
 3. run `ngrok` to deploy Line Chat Bot locally(`ngrok.exe http 5000`)
 
-4. 從`.env.sample`產生出一個`.env`，並填入以下四個資訊
+4. 從`.env.sample`產生出一個`.env`，並填入以下3個資訊
     - Line
         - LINE_CHANNEL_SECRET
         - LINE_CHANNEL_ACCESS_TOKEN
