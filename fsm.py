@@ -62,7 +62,7 @@ class TocMachine(GraphMachine):
         database_create_person()
         print("I'm finish")
         reply_token = event.reply_token
-        send_text_message(reply_token, "person")
+        send_text_message(reply_token, "輸入「insert」，輸入資訊。\n輸入「select」，可列出資料庫資料或刪除資料。\n輸入「update」可更新資料")
         #self.go_back(event)
 
     def on_exit_person(self,  event):
@@ -70,7 +70,7 @@ class TocMachine(GraphMachine):
     
     def on_enter_insert(self, event):
         reply_token = event.reply_token
-        send_text_message(reply_token, "請打輸入資料，格式為：\n姓名/生日（例：1994.10.11）/第一張solo專輯/您最喜歡的歌")
+        send_text_message(reply_token, "請打輸入資料，格式為：\ninsert\n姓名/生日（例：1994.10.11）/第一張solo專輯/您最喜歡的歌")
         #self.go_back(event)
 
     def on_exit_insert(self, event):
@@ -94,7 +94,7 @@ class TocMachine(GraphMachine):
         print("I'm entering data")
 
         reply_token = event.reply_token
-        send_text_message(reply_token, "fin the insert")
+        send_text_message(reply_token, "finish insert")
         self.go_back(event)
 
     def on_exit_input_data(self, event):
@@ -103,7 +103,7 @@ class TocMachine(GraphMachine):
     def on_enter_select(self, event):
         print("I'm entering select")
         reply_token = event.reply_token
-        send_text_message(reply_token, "select")
+        send_text_message(reply_token, "輸入「list」列出資料庫中資料\n若輸入：\ndelete\nname 甜甜\n\n則可刪除名字為甜甜的資料")
         #self.go_back(event)
 
     def on_exit_select(self,  event):

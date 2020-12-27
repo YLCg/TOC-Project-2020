@@ -136,7 +136,7 @@ def webhook_handler():
                 send_text_message(event.reply_token, "restart")
                 machine.go_back(event)
             elif machine.state == "user":
-                send_text_message(event.reply_token, "請打person進入個人資料庫\n欲重新開始，請底re")
+                send_text_message(event.reply_token, "輸入「show fsm」獲得此line bot 的fsm。\n輸入「person」進入資料庫。\n輸入「re」會回到最開始")
             elif machine.state == "update":
                 send_text_message(event.reply_token, "請選擇條件\n")
             else:
