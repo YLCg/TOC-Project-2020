@@ -2,8 +2,8 @@ import os
 import psycopg2
 
 def database_create_person():
-    DATABASE_URL = os.popen('heroku config:get DATABASE_URL -a f64061070').read()[:-1]
-    #DATABASE_URL = os.environ['DATABASE_URL']
+    #DATABASE_URL = os.popen('heroku config:get DATABASE_URL -a f64061070').read()[:-1]
+    DATABASE_URL = os.environ['DATABASE_URL']
     print("in")
 
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
@@ -25,8 +25,8 @@ def database_create_person():
 
 
 def line_insert_record(record_list):
-    DATABASE_URL = os.popen('heroku config:get DATABASE_URL -a f64061070').read()[:-1]
-    #DATABASE_URL = os.environ['DATABASE_URL']
+    #DATABASE_URL = os.popen('heroku config:get DATABASE_URL -a f64061070').read()[:-1]
+    DATABASE_URL = os.environ['DATABASE_URL']
 
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cursor = conn.cursor()
@@ -44,8 +44,8 @@ def line_insert_record(record_list):
 
 
 def database_select():
-    DATABASE_URL = os.popen('heroku config:get DATABASE_URL -a f64061070').read()[:-1]
-    #DATABASE_URL = os.environ['DATABASE_URL']
+    #DATABASE_URL = os.popen('heroku config:get DATABASE_URL -a f64061070').read()[:-1]
+    DATABASE_URL = os.environ['DATABASE_URL']
 
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cursor = conn.cursor()
@@ -57,8 +57,8 @@ def database_select():
 
 def database_list(text):
 
-    DATABASE_URL = os.popen('heroku config:get DATABASE_URL -a f64061070').read()[:-1]
-    #DATABASE_URL = os.environ['DATABASE_URL']
+    #DATABASE_URL = os.popen('heroku config:get DATABASE_URL -a f64061070').read()[:-1]
+    DATABASE_URL = os.environ['DATABASE_URL']
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cursor = conn.cursor()
 
@@ -78,8 +78,8 @@ def database_list(text):
 
 
 def deleteData(text):
-    DATABASE_URL = os.popen('heroku config:get DATABASE_URL -a f64061070').read()[:-1]
-    #DATABASE_URL = os.environ['DATABASE_URL']
+    #DATABASE_URL = os.popen('heroku config:get DATABASE_URL -a f64061070').read()[:-1]
+    DATABASE_URL = os.environ['DATABASE_URL']
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cursor = conn.cursor()
 
@@ -97,8 +97,8 @@ def deleteData(text):
 
 def updateData(text_set, text_con):
 
-    DATABASE_URL = os.popen('heroku config:get DATABASE_URL -a f64061070').read()[:-1]
-    # DATABASE_URL = os.environ['DATABASE_URL']
+    #DATABASE_URL = os.popen('heroku config:get DATABASE_URL -a f64061070').read()[:-1]
+    DATABASE_URL = os.environ['DATABASE_URL']
 
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cursor = conn.cursor()
