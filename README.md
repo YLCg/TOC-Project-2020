@@ -64,13 +64,13 @@
 ![fsm](./img/fsm.png)
 
 ## 展示
-![fsm](./img/1.png)
-![fsm](./img/2.png)
-![fsm](./img/3.png)
-![fsm](./img/4.png)
-![fsm](./img/5.png)
-![fsm](./img/6.png)
-![fsm](./img/7.png)
+![1](./img/1.PNG)
+![2](./img/2.PNG)
+![3](./img/3.PNG)
+![4](./img/4.PNG)
+![5](./img/5.PNG)
+![6](./img/6.PNG)
+![7](./img/7.PNG)
 ## Reference
 [Pipenv](https://medium.com/@chihsuan/pipenv-更簡單-更快速的-python-套件管理工具-135a47e504f4) ❤️ [@chihsuan](https://github.com/chihsuan)
 
