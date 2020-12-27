@@ -12,31 +12,29 @@
 
 2. install ```pipenv ```所需套件
 
-3. run `ngrok` to deploy Line Chat Bot locally
-```shell
-ngrok.exe http 5000
-```
+3. run `ngrok` to deploy Line Chat Bot locally(`ngrok.exe http 5000`)
+
 4. 從`.env.sample`產生出一個`.env`，並填入以下四個資訊
-- Line
-    - LINE_CHANNEL_SECRET
-    - LINE_CHANNEL_ACCESS_TOKEN
-- fsm
-    - fsm_url=ngrok跑出來的https
-    - - 用於生成當下的fsm
+    - Line
+        - LINE_CHANNEL_SECRET
+        - LINE_CHANNEL_ACCESS_TOKEN
+    - fsm
+        - fsm_url=ngrok跑出來的https
+        - - 用於生成當下的fsm
+    
 5. 修改 line 開發者頁面的 Webhook URL
 
-6.將database.py 中的
+6.將database.py 中的`DATABASE_URL = os.environ['DATABASE_URL']`皆修改成
+`DATABASE_URL = os.popen('heroku config:get DATABASE_URL -a f64061070').read()[:-1]`
 
-`DATABASE_URL = os.environ['DATABASE_URL']`
-皆修改成
-`DATABASE_URL = os.popen('heroku config:get DATABASE_URL -a f64061070').read()[:-1]
-7. run ```heroku local```
+7.run ```heroku local```
 ## states
 
 1.user：
     - 輸入"show fsm"獲得此line bot 的fsm。
     - 輸入"person" 進入資料庫。
     - 輸入"re"會回到最開始（user）。
+    
 2.show fsm:
     - 產出fsm並回到user
 3.person:
