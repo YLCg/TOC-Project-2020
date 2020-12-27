@@ -72,6 +72,8 @@ def database_list(text):
     message = "list:\n"
     for row in result:
         message = message + "id = " + str(row[0])+"/" + row[1] + "/" + str(row[2]) + "/" + row[3] + "/" + row[4]+"\n"
+
+
     cursor.close()
     conn.close()
 
